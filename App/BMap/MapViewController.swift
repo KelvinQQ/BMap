@@ -9,17 +9,69 @@
 import UIKit
 import SnapKit
 
-class MapViewController: UIViewController, MAMapViewDelegate {
+class MapViewController: UIViewController, MAMapViewDelegate, MapNavigationViewDelegate, SearchNavigationViewDelegate, AMapSearchDelegate, POIsTableViewDelegate, SpeedTableViewDelegate {
+    func didSelected(history: String) {
+        
+    }
+    
+    func didSelectedHome() {
+        
+    }
+    
+    func didSelectedCompany() {
+        
+    }
+    
+    func didSelected(poi: AMapPOI) {
+        self.showPoisInMap(selected: poi)
+    }
+    
+    func menuAction() {
+        self.slideMenuController()?.toggleLeft()
+    }
+    
+    func backAction() {
+        self.poisListView.clearView()
+        self.changeNavigationToMap()
+        if let mapView = self.gdMapView {
+            mapView.removeAnnotations(mapView.annotations)
+            mapView.setZoomLevel(16, animated: true)
+        }
+    }
+    
+    func searchAction() {
+        self.changeNavigationToSearch()
+    }
+    
+    func beginSearch(keyword: String) {
+        
+        self.currentPage = 0
+        
+        let request = AMapPOIKeywordsSearchRequest()
+        request.keywords = keyword
+        request.requireExtension = true
+        request.page = self.currentPage
+        
+        self.searchAPI?.aMapPOIKeywordsSearch(request)
+    }
     
     var gdMapView: MAMapView?
+    lazy var mapNavigationView = MapNavigationView.init(frame: CGRect.zero)
+    lazy var searchNavigationView = SearchNavigationView.init(frame: CGRect.zero)
     lazy var searchView = UIView.init()
-    lazy var searchButton = UIButton.init(type: UIButton.ButtonType.custom)
-    lazy var leftButton = UIButton.init(type: UIButton.ButtonType.custom)
+
     lazy var locationButton = UIButton.init(type: .custom)
     lazy var zoomInButton = UIButton.init(type: .custom)
     lazy var zoomOutButton = UIButton.init(type: .custom)
     lazy var traficButton = UIButton.init(type: .custom)
-
+    
+    lazy var searchAPI = AMapSearchAPI.init()
+    
+    lazy var poisListView = POIsTableView.init(frame: .zero)
+    lazy var speedListView = SpeedTableView.init(frame: .zero)
+    
+    var currentPage = 0
+    
     deinit {
         if let mapView = gdMapView {
             mapView.removeObserver(self, forKeyPath: "showsUserLocation")
@@ -42,38 +94,13 @@ class MapViewController: UIViewController, MAMapViewDelegate {
         }
         mapView.showsUserLocation = true
         mapView.userTrackingMode = .follow
+        mapView.isShowTraffic = true
         mapView.addObserver(self, forKeyPath: "showsUserLocation", options: NSKeyValueObservingOptions.new, context: nil)
         mapView.setZoomLevel(16, animated: true)
+        mapView.showsCompass = false
         self.gdMapView = mapView
         
-        self.view.addSubview(self.searchView)
-        self.searchView.snp.makeConstraints { (make) in
-            make.left.right.equalTo(self.view)
-            make.top.equalTo(self.view).offset(30)
-            make.height.equalTo(50)
-        }
-        self.searchView.backgroundColor = UIColor.white
-        
-        self.view.addSubview(self.leftButton)
-        self.leftButton.snp.makeConstraints { (make) in
-            make.centerY.equalTo(self.searchView)
-            make.left.equalTo(self.searchView).offset(20)
-            make.height.equalTo(self.searchView)
-            make.width.equalTo(self.leftButton.snp.height)
-        }
-        self.leftButton.backgroundColor = .red
-        self.leftButton.addTarget(self, action: #selector(leftButtonAction), for: .touchUpInside)
-        self.leftButton.setImage(UIImage.init(named: "icon_menu"), for: .normal)
-        
-        self.searchView.addSubview(self.searchButton)
-        self.searchButton.setTitle("搜索地点", for: .normal)
-        self.searchButton.setTitleColor(UIColor.black, for: .normal)
-        self.searchButton.snp.makeConstraints { (make) in
-            make.centerY.equalTo(self.searchView)
-            make.left.equalTo(self.searchView).offset(90)
-            make.right.equalTo(self.searchView).offset(-10)
-        }
-        self.searchButton.addTarget(self, action: #selector(searchAction), for: .touchUpInside)
+        self.changeNavigationToMap()
         
         let padding = 20
         let buttonHeight = 50
@@ -124,21 +151,56 @@ class MapViewController: UIViewController, MAMapViewDelegate {
         self.locationButton.addTarget(self, action: #selector(locationAction(sender:)), for: .touchUpInside)
         self.locationButton.backgroundColor = .red
         
+        self.mapNavigationView.delegate = self
+        self.searchNavigationView.delegate = self
+        
+        self.searchAPI?.delegate = self
         
     }
-    
-    @objc func leftButtonAction() {
-        self.slideMenuController()?.toggleLeft()
+
+    func changeNavigationToMap() {
+        if self.mapNavigationView.superview == nil {
+            self.view.addSubview(self.mapNavigationView)
+            self.mapNavigationView.snp.makeConstraints { (make) in
+                make.left.right.top.equalTo(self.view).inset(UIEdgeInsets.init(top: 40, left: 20, bottom: 0, right: 20))
+                make.height.equalTo(50)
+            }
+        }
+        
+        self.mapNavigationView.isHidden = false
+        self.searchNavigationView.isHidden = true
+        self.poisListView.isHidden = true
+        self.speedListView.isHidden = true
     }
     
-    @objc func searchAction() {
-        let searchVc = SearchViewController.init(nibName: nil, bundle: nil)
-        self.navigationController?.pushViewController(searchVc, animated: true)
+    func changeNavigationToSearch() {
+        if self.searchNavigationView.superview == nil {
+            self.view.addSubview(self.searchNavigationView)
+            self.searchNavigationView.snp.makeConstraints { (make) in
+                make.left.right.top.equalTo(self.view).inset(UIEdgeInsets.init(top: 40, left: 20, bottom: 0, right: 20))
+                make.height.equalTo(50)
+            }
+        }
+        
+        if self.speedListView.superview == nil {
+            self.view.addSubview(self.speedListView)
+            self.speedListView.delegate = self
+            self.speedListView.snp.makeConstraints { (make) in
+                make.left.right.equalTo(self.view)
+                make.top.equalTo(self.searchNavigationView.snp.bottom).offset(10)
+                make.bottom.equalTo(self.view)
+            }
+        }
+        
+        self.mapNavigationView.isHidden = true
+        self.searchNavigationView.isHidden = false
+        self.poisListView.isHidden = true
+        self.speedListView.isHidden = false
     }
     
     @objc func locationAction(sender: UIButton) {
-        if let _ = self.gdMapView {
-            
+        if let mapView = self.gdMapView {
+            mapView.userTrackingMode = MAUserTrackingMode(rawValue: (mapView.userTrackingMode.rawValue + 1) % 3)!
         }
     }
     
@@ -166,6 +228,40 @@ class MapViewController: UIViewController, MAMapViewDelegate {
             mapView.setZoomLevel(min(mapView.zoomLevel + 1, mapView.maxZoomLevel), animated: true)
         }
     }
+    
+    //MARK: - AMapSearchDelegate
+    func aMapSearchRequest(_ request: Any!, didFailWithError error: Error!) {
+        
+    }
+    
+    func onPOISearchDone(_ request: AMapPOISearchBaseRequest!, response: AMapPOISearchResponse!) {
+        
+        if response.count == 0 {
+            return
+        }
+        
+        if self.poisListView.superview == nil {
+            self.view.addSubview(self.poisListView)
+            self.poisListView.delegate = self
+            self.poisListView.snp.makeConstraints { (make) in
+                make.left.right.equalTo(self.view)
+                make.height.equalTo(250)
+                make.bottom.equalTo(self.view)
+            }
+        }
+        
+        self.mapNavigationView.isHidden = true
+        self.searchNavigationView.isHidden = false
+        self.poisListView.isHidden = false
+        self.speedListView.isHidden = true
+        
+        if self.currentPage == 0 {
+            self.poisListView.refreshView(pois: response.pois)
+        }
+        else {
+            self.poisListView.appendView(pois: response.pois)
+        }
+    }
 
     //MARK: - MAMapViewDelegate
     func mapViewRequireLocationAuth(_ locationManager: CLLocationManager!) {
@@ -190,6 +286,32 @@ class MapViewController: UIViewController, MAMapViewDelegate {
             }
             
         }
+    }
+    
+    func showPoisInMap(selected: AMapPOI) {
+        
+        var annotations = Array<MAPointAnnotation>()
+        
+        var selectedAnnotation = MAPointAnnotation()
+        
+        for poi in self.poisListView.poisArray {
+            let coordinate = CLLocationCoordinate2D(latitude: CLLocationDegrees(poi.location.latitude), longitude: CLLocationDegrees(poi.location.longitude))
+            let annotation = MAPointAnnotation()
+            annotation.coordinate = coordinate
+            annotation.title = poi.name
+            annotation.subtitle = poi.address
+            annotations.append(annotation)
+            if selected.uid == poi.uid {
+                selectedAnnotation = annotation
+            }
+        }
+        
+        guard let mapView = self.gdMapView else {
+            return
+        }
+        mapView.addAnnotations(annotations)
+        mapView.showAnnotations(annotations, edgePadding: UIEdgeInsets.init(top: 70, left: 0, bottom: 250, right: 0), animated: true)
+        mapView.selectAnnotation(selectedAnnotation, animated: true)
     }
 }
 

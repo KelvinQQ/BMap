@@ -12,6 +12,8 @@
 		977BA2632348CF7800B32082 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 977BA2622348CF7800B32082 /* MapViewController.swift */; };
 		977BA2682348CF7A00B32082 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 977BA2672348CF7A00B32082 /* Assets.xcassets */; };
 		977BA26B2348CF7A00B32082 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 977BA2692348CF7A00B32082 /* LaunchScreen.storyboard */; };
+		97E28964234AFF8000458992 /* MapTopView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97E28963234AFF8000458992 /* MapTopView.swift */; };
+		97E28966234B0E7E00458992 /* SearchPoiView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97E28965234B0E7E00458992 /* SearchPoiView.swift */; };
 		97E4D94A234A15DA0082E6EC /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97E4D949234A15DA0082E6EC /* SearchViewController.swift */; };
 		97E4D94C234A37230082E6EC /* RouteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97E4D94B234A37230082E6EC /* RouteViewController.swift */; };
 		CED5748703ADCB48D27EFA20 /* Pods_BMap_BMap.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9D4E019CB0FEF4B214B6138D /* Pods_BMap_BMap.framework */; };
@@ -28,6 +30,8 @@
 		977BA26A2348CF7A00B32082 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		977BA26C2348CF7A00B32082 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		979E4A102348DE05006B6514 /* BMap-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "BMap-Bridging-Header.h"; sourceTree = "<group>"; };
+		97E28963234AFF8000458992 /* MapTopView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapTopView.swift; sourceTree = "<group>"; };
+		97E28965234B0E7E00458992 /* SearchPoiView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchPoiView.swift; sourceTree = "<group>"; };
 		97E4D949234A15DA0082E6EC /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		97E4D94B234A37230082E6EC /* RouteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteViewController.swift; sourceTree = "<group>"; };
 		9D4E019CB0FEF4B214B6138D /* Pods_BMap_BMap.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BMap_BMap.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -85,6 +89,8 @@
 				97363CC52349D22B008D1675 /* LeftViewController.swift */,
 				97E4D949234A15DA0082E6EC /* SearchViewController.swift */,
 				97E4D94B234A37230082E6EC /* RouteViewController.swift */,
+				97E28963234AFF8000458992 /* MapTopView.swift */,
+				97E28965234B0E7E00458992 /* SearchPoiView.swift */,
 			);
 			path = BMap;
 			sourceTree = "<group>";
@@ -249,8 +255,10 @@
 				97363CC62349D22B008D1675 /* LeftViewController.swift in Sources */,
 				977BA2632348CF7800B32082 /* MapViewController.swift in Sources */,
 				97E4D94A234A15DA0082E6EC /* SearchViewController.swift in Sources */,
+				97E28964234AFF8000458992 /* MapTopView.swift in Sources */,
 				97E4D94C234A37230082E6EC /* RouteViewController.swift in Sources */,
 				977BA2612348CF7700B32082 /* AppDelegate.swift in Sources */,
+				97E28966234B0E7E00458992 /* SearchPoiView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
