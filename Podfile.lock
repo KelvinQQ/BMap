@@ -1,0 +1,52 @@
+PODS:
+  - AMap3DMap (6.9.0):
+    - AMapFoundation (~> 1.5)
+  - AMapFoundation (1.5.7)
+  - AMapLocation (2.6.3):
+    - AMapFoundation (~> 1.4)
+  - AMapNavi (6.9.1):
+    - AMap3DMap (~> 6.7)
+    - AMapFoundation (~> 1.5)
+  - AMapSearch (6.9.0):
+    - AMapFoundation (~> 1.4)
+  - BaiduMapKit (5.0.0)
+  - BMKLocationKit (1.8.0)
+  - SlideMenuControllerSwift (4.0.0)
+  - SnapKit (5.0.1)
+
+DEPENDENCIES:
+  - AMap3DMap
+  - AMapLocation
+  - AMapNavi
+  - AMapSearch
+  - BaiduMapKit
+  - BMKLocationKit
+  - SlideMenuControllerSwift
+  - SnapKit
+
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - AMap3DMap
+    - AMapFoundation
+    - AMapLocation
+    - AMapNavi
+    - AMapSearch
+    - BaiduMapKit
+    - BMKLocationKit
+    - SlideMenuControllerSwift
+    - SnapKit
+
+SPEC CHECKSUMS:
+  AMap3DMap: c80b264f08f179d9b0949b84c65fc1a51dec9d6f
+  AMapFoundation: 216d58448c80356434ac4332250a8fdb2f5c4d1e
+  AMapLocation: dc2c4fde95d72087d73934338160fadc72104bb7
+  AMapNavi: 7e7c6ab0b9ad45ddba19297901d63236ff4be710
+  AMapSearch: af02822537e55b85a4752e9df5c19e4b9da82031
+  BaiduMapKit: 3a875b001293a9ee6692febd549d8bf82108dbac
+  BMKLocationKit: 29f9f04827bfe2f2ca2c1c87b11161f05d4189a5
+  SlideMenuControllerSwift: 021d6318201c53d4d4d3710517d43d6c556c7dd0
+  SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
+
+PODFILE CHECKSUM: 93b9b19e4a757aa2f12dc7dfa7166457d9d5d2b9
+
+COCOAPODS: 1.6.0.beta.2
