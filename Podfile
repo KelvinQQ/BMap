@@ -19,6 +19,7 @@ abstract_target 'BMap' do
     pod 'BaiduMapKit'
     pod 'BMKLocationKit'
     pod 'SlideMenuControllerSwift'
+    pod 'BetterSegmentedControl', '~> 1.2'
   end
   
   

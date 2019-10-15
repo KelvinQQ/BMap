@@ -10,6 +10,7 @@ PODS:
   - AMapSearch (6.9.0):
     - AMapFoundation (~> 1.4)
   - BaiduMapKit (5.0.0)
+  - BetterSegmentedControl (1.2.1)
   - BMKLocationKit (1.8.0)
   - SlideMenuControllerSwift (4.0.0)
   - SnapKit (5.0.1)
@@ -20,6 +21,7 @@ DEPENDENCIES:
   - AMapNavi
   - AMapSearch
   - BaiduMapKit
+  - BetterSegmentedControl (~> 1.2)
   - BMKLocationKit
   - SlideMenuControllerSwift
   - SnapKit
@@ -32,6 +34,7 @@ SPEC REPOS:
     - AMapNavi
     - AMapSearch
     - BaiduMapKit
+    - BetterSegmentedControl
     - BMKLocationKit
     - SlideMenuControllerSwift
     - SnapKit
@@ -43,10 +46,11 @@ SPEC CHECKSUMS:
   AMapNavi: 7e7c6ab0b9ad45ddba19297901d63236ff4be710
   AMapSearch: af02822537e55b85a4752e9df5c19e4b9da82031
   BaiduMapKit: 3a875b001293a9ee6692febd549d8bf82108dbac
+  BetterSegmentedControl: b27bddbdff29b6cae988678d6cd106858986cd03
   BMKLocationKit: 29f9f04827bfe2f2ca2c1c87b11161f05d4189a5
   SlideMenuControllerSwift: 021d6318201c53d4d4d3710517d43d6c556c7dd0
   SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
 
-PODFILE CHECKSUM: 93b9b19e4a757aa2f12dc7dfa7166457d9d5d2b9
+PODFILE CHECKSUM: 43ca3f7afbfb92982673294319ad276cbbc91db2
 
 COCOAPODS: 1.6.0.beta.2
