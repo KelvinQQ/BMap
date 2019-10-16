@@ -81,6 +81,7 @@ class MapViewController: UIViewController, MAMapViewDelegate, MapNavigationViewD
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
+        
         self.navigationController?.setNavigationBarHidden(true, animated: false)
         AMapServices.shared().enableHTTPS = true
         

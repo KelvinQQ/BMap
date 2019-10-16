@@ -492,11 +492,6 @@ extension RouteViewController: AMapNaviDriveManagerDelegate {
 //    }
     
     func defaultTextureImage(routeStatus: AMapNaviRouteStatus, selected: Bool) -> UIImage? {
-        let bundlePath = Bundle.main.path(forResource: "AMapNavi", ofType: "bundle")!
-        let htmlBundle = Bundle.init(path: bundlePath)?.path(forResource: <#T##String?#>, ofType: <#T##String?#>)
-        let path = htmlBundle.path(forResource:"fwxm", ofType:"html", inDirectory:"xuqiu/add"
-
-
         var imageName = ""
         switch routeStatus {
         case .smooth:
@@ -512,8 +507,12 @@ extension RouteViewController: AMapNaviDriveManagerDelegate {
         }
 
         if !selected {
-            imageName = imageName + "_unselected"
+            imageName = imageName + "_unselected.png"
         }
-        return UIImage.init(named: imageName)
+        
+        let bundlePath = Bundle.main.path(forResource: "AMapNavi", ofType: "bundle")!
+        imageName = "\(bundlePath)/images/custtexture_slow.png"
+        let image = UIImage.init(named: imageName);
+        return image
     }
 }
