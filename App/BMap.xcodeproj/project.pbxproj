@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -21,6 +21,7 @@
 		97A891F42354C5590046F8EB /* CustomMAMultiPolyline.m in Sources */ = {isa = PBXBuildFile; fileRef = 97A891F22354C5590046F8EB /* CustomMAMultiPolyline.m */; };
 		97A891F72354C5DB0046F8EB /* CommonUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = 97A891F62354C5DB0046F8EB /* CommonUtility.m */; };
 		97A8920123561CF90046F8EB /* SelectableOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = 97A891FF23561CF90046F8EB /* SelectableOverlay.m */; };
+		97BC2DA02356E39400DC6A91 /* MultiDriveRoutePolyline.m in Sources */ = {isa = PBXBuildFile; fileRef = 97BC2D9E2356E39400DC6A91 /* MultiDriveRoutePolyline.m */; };
 		97E28964234AFF8000458992 /* MapTopView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97E28963234AFF8000458992 /* MapTopView.swift */; };
 		97E28966234B0E7E00458992 /* SearchPoiView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97E28965234B0E7E00458992 /* SearchPoiView.swift */; };
 		97E4D94A234A15DA0082E6EC /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97E4D949234A15DA0082E6EC /* SearchViewController.swift */; };
@@ -55,6 +56,8 @@
 		97A891F62354C5DB0046F8EB /* CommonUtility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommonUtility.m; sourceTree = "<group>"; };
 		97A891FF23561CF90046F8EB /* SelectableOverlay.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SelectableOverlay.m; sourceTree = "<group>"; };
 		97A8920023561CF90046F8EB /* SelectableOverlay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelectableOverlay.h; sourceTree = "<group>"; };
+		97BC2D9E2356E39400DC6A91 /* MultiDriveRoutePolyline.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MultiDriveRoutePolyline.m; sourceTree = "<group>"; };
+		97BC2D9F2356E39400DC6A91 /* MultiDriveRoutePolyline.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MultiDriveRoutePolyline.h; sourceTree = "<group>"; };
 		97E28963234AFF8000458992 /* MapTopView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapTopView.swift; sourceTree = "<group>"; };
 		97E28965234B0E7E00458992 /* SearchPoiView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchPoiView.swift; sourceTree = "<group>"; };
 		97E4D949234A15DA0082E6EC /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
@@ -126,6 +129,8 @@
 		97A891E22354C48A0046F8EB /* model */ = {
 			isa = PBXGroup;
 			children = (
+				97BC2D9F2356E39400DC6A91 /* MultiDriveRoutePolyline.h */,
+				97BC2D9E2356E39400DC6A91 /* MultiDriveRoutePolyline.m */,
 				97A8920023561CF90046F8EB /* SelectableOverlay.h */,
 				97A891FF23561CF90046F8EB /* SelectableOverlay.m */,
 				97A891F52354C5DB0046F8EB /* CommonUtility.h */,
@@ -187,7 +192,7 @@
 				TargetAttributes = {
 					977BA25C2348CF7700B32082 = {
 						CreatedOnToolsVersion = 10.1;
-						LastSwiftMigration = 1010;
+						LastSwiftMigration = 1110;
 					};
 				};
 			};
@@ -228,20 +233,11 @@
 			files = (
 			);
 			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-BMap-BMap/Pods-BMap-BMap-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/BetterSegmentedControl/BetterSegmentedControl.framework",
-				"${BUILT_PRODUCTS_DIR}/SlideMenuControllerSwift/SlideMenuControllerSwift.framework",
-				"${BUILT_PRODUCTS_DIR}/SnapKit/SnapKit.framework",
+				"${PODS_ROOT}/Target Support Files/Pods-BMap-BMap/Pods-BMap-BMap-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
-			);
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/BetterSegmentedControl.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SlideMenuControllerSwift.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SnapKit.framework",
+				"${PODS_ROOT}/Target Support Files/Pods-BMap-BMap/Pods-BMap-BMap-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -276,20 +272,11 @@
 			files = (
 			);
 			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-BMap-BMap/Pods-BMap-BMap-resources.sh",
-				"${PODS_ROOT}/AMap3DMap/MAMapKit.framework/AMap.bundle",
-				"${PODS_ROOT}/AMapNavi/AMapNaviKit.framework/AMapNavi.bundle",
-				"${PODS_ROOT}/BaiduMapKit/BaiduMapKit/BaiduMapAPI_Map.framework/mapapi.bundle",
+				"${PODS_ROOT}/Target Support Files/Pods-BMap-BMap/Pods-BMap-BMap-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
-			);
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AMap.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AMapNavi.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/mapapi.bundle",
+				"${PODS_ROOT}/Target Support Files/Pods-BMap-BMap/Pods-BMap-BMap-resources-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -303,6 +290,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				97BC2DA02356E39400DC6A91 /* MultiDriveRoutePolyline.m in Sources */,
 				97A891EF2354C48A0046F8EB /* MANaviAnnotation.m in Sources */,
 				97363CC62349D22B008D1675 /* LeftViewController.swift in Sources */,
 				97A891F42354C5590046F8EB /* CustomMAMultiPolyline.m in Sources */,

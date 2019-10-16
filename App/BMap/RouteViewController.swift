@@ -395,10 +395,25 @@ extension RouteViewController: AMapNaviDriveManagerDelegate {
                 coords[i].latitude = CLLocationDegrees(coordinate.latitude)
                 coords[i].longitude = CLLocationDegrees(coordinate.longitude)
             }
-            let polyline = MAPolyline.init(coordinates: coords, count: UInt(count))
-            let selectablePolyline = SelectableOverlay.init(overlay: polyline)
-            selectablePolyline?.routeID = routeId.intValue
-            self.mapView.add(selectablePolyline)
+            var textureImagesArrayNormal = [UIImage]()
+            var textureImagesArraySelected = [UIImage]()
+            
+            for status in route.routeTrafficStatuses {
+                let img = self.defaultTextureImage(routeStatus: status.status, selected: false)
+                let selectedImg = self.defaultTextureImage(routeStatus: status.status, selected: true)
+                if let img = img , let selectedImg = selectedImg {
+                    textureImagesArrayNormal.append(img)
+                    textureImagesArraySelected.append(selectedImg)
+                }
+            }
+            
+            let polyline = MultiDriveRoutePolyline.init(coordinates: coords, count: UInt(count), drawStyleIndexes: route.drawStyleIndexes)
+            
+            polyline?.polylineTextureImages = textureImagesArrayNormal
+            polyline?.polylineTextureImagesSeleted = textureImagesArraySelected
+            polyline?.routeID = routeId.intValue
+            
+            self.mapView.add(polyline)
             coords.deallocate()
 //            let info = Route
         }
@@ -475,4 +490,30 @@ extension RouteViewController: AMapNaviDriveManagerDelegate {
 //    NSLog(@"路径选择失败!");
 //    }
 //    }
+    
+    func defaultTextureImage(routeStatus: AMapNaviRouteStatus, selected: Bool) -> UIImage? {
+        let bundlePath = Bundle.main.path(forResource: "AMapNavi", ofType: "bundle")!
+        let htmlBundle = Bundle.init(path: bundlePath)?.path(forResource: <#T##String?#>, ofType: <#T##String?#>)
+        let path = htmlBundle.path(forResource:"fwxm", ofType:"html", inDirectory:"xuqiu/add"
+
+
+        var imageName = ""
+        switch routeStatus {
+        case .smooth:
+            imageName = "custtexture_greed"
+        case .slow:
+            imageName = "custtexture_slow"
+        case .jam:
+            imageName = "custtexture_bad"
+        case .seriousJam:
+            imageName = "custtexture_serious"
+        default:
+            imageName = "custtexture_no"
+        }
+
+        if !selected {
+            imageName = imageName + "_unselected"
+        }
+        return UIImage.init(named: imageName)
+    }
 }
