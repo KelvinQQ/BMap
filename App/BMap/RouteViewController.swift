@@ -76,6 +76,7 @@ class RouteTopView: UIView {
 
 class RouteViewController: UIViewController, MAMapViewDelegate, AMapSearchDelegate {
     
+    private let AMapNaviRoutePolylineDefaultWidth = 30.0
     lazy var topView = RouteTopView.init()
     lazy var segmentView = BetterSegmentedControl.init(frame: .zero,
                                                        segments: [LabelSegment.init(text: "驾车"),
@@ -438,8 +439,29 @@ extension RouteViewController: AMapNaviDriveManagerDelegate {
     
     func selectNaviRoute(routeId: Int) -> Void {
         if AMapNaviDriveManager.sharedInstance().selectNaviRoute(withRouteID: routeId) {
-//            self.selectNaviRoute(routeId: <#T##Int#>)
+            self.selecteOverlay(routeId: routeId)
         }
+    }
+    
+    func selecteOverlay(routeId: Int) {
+        var selectedPolylines = [MAOverlay]()
+        let backupRoutePolylineWidthScale = 0.8
+        for (idx, overlay) in self.mapView.overlays.enumerated() {
+            if (overlay as! MAOverlay).isKind(of: MultiDriveRoutePolyline.self) {
+                let multiPolyline = overlay as! MultiDriveRoutePolyline
+                let overlayRenderer = self.mapView.renderer(for: multiPolyline) as! MAMultiTexturePolylineRenderer
+                if multiPolyline.routeID == routeId {
+                    selectedPolylines.append(overlay as! MAOverlay)
+                }
+                else {
+                    overlayRenderer.lineWidth = CGFloat(AMapNaviRoutePolylineDefaultWidth * backupRoutePolylineWidthScale)
+                    overlayRenderer.strokeTextureImages = multiPolyline.polylineTextureImages
+                }
+            }
+        }
+
+        self.mapView.removeOverlays(selectedPolylines)
+        self.mapView.addOverlays(selectedPolylines)
     }
     
 //    - (void)selecteOverlayWithRouteID:(NSInteger)routeID
