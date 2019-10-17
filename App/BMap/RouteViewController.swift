@@ -135,6 +135,7 @@ class RouteViewController: UIViewController, MAMapViewDelegate, AMapSearchDelega
             make.bottom.equalTo(self.view)
         }
 
+        self.searchRoutePlanningDrive()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -280,7 +281,7 @@ class RouteViewController: UIViewController, MAMapViewDelegate, AMapSearchDelega
             return renderer
         }
         if overlay.isKind(of: MAMultiPolyline.self) {
-            let renderer: MAMultiColoredPolylineRenderer = MAMultiColoredPolylineRenderer(multiPolyline: overlay as! MAMultiPolyline!)
+            let renderer: MAMultiColoredPolylineRenderer = MAMultiColoredPolylineRenderer(multiPolyline: (overlay as! MAMultiPolyline))
             renderer.lineWidth = 8.0
             renderer.strokeColors = naviRoute?.multiPolylineColors
 
@@ -370,7 +371,6 @@ class RouteViewController: UIViewController, MAMapViewDelegate, AMapSearchDelega
 
 extension RouteViewController: AMapNaviDriveManagerDelegate {
     func driveManager(onCalculateRouteSuccess driveManager: AMapNaviDriveManager) {
-//        driveManager.naviRoutes
         self.showNaviRoutes()
     }
     
@@ -386,11 +386,11 @@ extension RouteViewController: AMapNaviDriveManagerDelegate {
         self.mapView.remove(self.mapView!.overlays as? MAOverlay)
 
 //        [self.routeIndicatorInfoArray removeAllObjects];
-        
+        var firstRouteId = 0
         for (routeId, route) in naviRoutes {
+            firstRouteId = routeId.intValue
             let count = route.routeCoordinates.count
-//            let coords = malloc(count * 100) as! CLLocationCoordinate2D
-            let coords = UnsafeMutablePointer<CLLocationCoordinate2D>.allocate(capacity: 1)
+            let coords = UnsafeMutablePointer<CLLocationCoordinate2D>.allocate(capacity: count)
             for i in 0..<count {
                 let coordinate = route.routeCoordinates[i]
                 coords[i].latitude = CLLocationDegrees(coordinate.latitude)
@@ -416,25 +416,9 @@ extension RouteViewController: AMapNaviDriveManagerDelegate {
             
             self.mapView.add(polyline)
             coords.deallocate()
-//            let info = Route
         }
         self.mapView.showAnnotations(self.mapView.annotations, animated: false)
-//        self.select
-
-//
-//            //更新CollectonView的信息
-//            RouteCollectionViewInfo *info = [[RouteCollectionViewInfo alloc] init];
-//            info.routeID = [aRouteID integerValue];
-//            info.title = [NSString stringWithFormat:@"路径ID:%ld | 路径计算策略:%ld", (long)[aRouteID integerValue], (long)[self.preferenceView strategyWithIsMultiple:self.isMultipleRoutePlan]];
-//            info.subtitle = [NSString stringWithFormat:@"长度:%ld米 | 预估时间:%ld秒 | 分段数:%ld", (long)aRoute.routeLength, (long)aRoute.routeTime, (long)aRoute.routeSegments.count];
-//
-//            [self.routeIndicatorInfoArray addObject:info];
-//        }
-//
-//        [self.mapView showAnnotations:self.mapView.annotations animated:NO];
-//        [self.routeIndicatorView reloadData];
-//
-//        [self selectNaviRouteWithID:[[self.routeIndicatorInfoArray firstObject] routeID]];
+        self.selectNaviRoute(routeId: firstRouteId)
     }
     
     func selectNaviRoute(routeId: Int) -> Void {
@@ -446,7 +430,7 @@ extension RouteViewController: AMapNaviDriveManagerDelegate {
     func selecteOverlay(routeId: Int) {
         var selectedPolylines = [MAOverlay]()
         let backupRoutePolylineWidthScale = 0.8
-        for (idx, overlay) in self.mapView.overlays.enumerated() {
+        for (_, overlay) in self.mapView.overlays.enumerated() {
             if (overlay as! MAOverlay).isKind(of: MultiDriveRoutePolyline.self) {
                 let multiPolyline = overlay as! MultiDriveRoutePolyline
                 let overlayRenderer = self.mapView.renderer(for: multiPolyline) as! MAMultiTexturePolylineRenderer
@@ -463,55 +447,6 @@ extension RouteViewController: AMapNaviDriveManagerDelegate {
         self.mapView.removeOverlays(selectedPolylines)
         self.mapView.addOverlays(selectedPolylines)
     }
-    
-//    - (void)selecteOverlayWithRouteID:(NSInteger)routeID
-//    {
-//    [self.mapView.overlays enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(id<MAOverlay> overlay, NSUInteger idx, BOOL *stop)
-//    {
-//    if ([overlay isKindOfClass:[SelectableOverlay class]])
-//    {
-//    SelectableOverlay *selectableOverlay = overlay;
-//
-//    /* 获取overlay对应的renderer. */
-//    MAPolylineRenderer * overlayRenderer = (MAPolylineRenderer *)[self.mapView rendererForOverlay:selectableOverlay];
-//
-//    if (selectableOverlay.routeID == routeID)
-//    {
-//    /* 设置选中状态. */
-//    selectableOverlay.selected = YES;
-//
-//    /* 修改renderer选中颜色. */
-//    overlayRenderer.fillColor   = selectableOverlay.selectedColor;
-//    overlayRenderer.strokeColor = selectableOverlay.selectedColor;
-//
-//    /* 修改overlay覆盖的顺序. */
-//    [self.mapView exchangeOverlayAtIndex:idx withOverlayAtIndex:self.mapView.overlays.count - 1];
-//    }
-//    else
-//    {
-//    /* 设置选中状态. */
-//    selectableOverlay.selected = NO;
-//
-//    /* 修改renderer选中颜色. */
-//    overlayRenderer.fillColor   = selectableOverlay.regularColor;
-//    overlayRenderer.strokeColor = selectableOverlay.regularColor;
-//    }
-//    }
-//    }];
-//    }
-    
-//    - (void)selectNaviRouteWithID:(NSInteger)routeID
-//    {
-//    //在开始导航前进行路径选择
-//    if ([[AMapNaviDriveManager sharedInstance] selectNaviRouteWithRouteID:routeID])
-//    {
-//    [self selecteOverlayWithRouteID:routeID];
-//    }
-//    else
-//    {
-//    NSLog(@"路径选择失败!");
-//    }
-//    }
     
     func defaultTextureImage(routeStatus: AMapNaviRouteStatus, selected: Bool) -> UIImage? {
         var imageName = ""
