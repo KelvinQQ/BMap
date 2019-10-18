@@ -20,6 +20,7 @@ abstract_target 'BMap' do
     # pod 'BMKLocationKit'
     pod 'SlideMenuControllerSwift'
     pod 'BetterSegmentedControl', '~> 1.2'
+    pod 'FloatingPanel', '~> 1.6.6'
   end
   
   

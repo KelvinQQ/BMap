@@ -28,6 +28,8 @@ class RouteTopView: UIView {
         backButton.snp.makeConstraints { (make) in
             make.left.equalTo(self).offset(20)
             make.top.equalTo(self).offset(10)
+            make.height.equalTo(40)
+            make.width.equalTo(40)
         }
         
         self.addSubview(self.originTextField)
@@ -78,12 +80,18 @@ class RouteViewController: UIViewController, MAMapViewDelegate, AMapSearchDelega
     
     private let AMapNaviRoutePolylineDefaultWidth = 30.0
     lazy var topView = RouteTopView.init()
+    
+   
     lazy var segmentView = BetterSegmentedControl.init(frame: .zero,
-                                                       segments: [LabelSegment.init(text: "驾车"),
-                                                                  LabelSegment.init(text: "骑行"),
-                                                                  LabelSegment.init(text: "步行")],
+                                                       segments: LabelSegment.segments(withTitles: ["驾车","骑行","步行"],
+                                                                                       normalFont: nil,
+                                                                                       selectedFont: nil,
+                                                                                       selectedTextColor: UIColor(red:0.20, green:0.68, blue:0.27, alpha:1.00)),
                                                        index: 0,
-                                                       options: nil)
+                                                       options: [.backgroundColor(.darkGray),
+                                                                 .indicatorViewBackgroundColor(UIColor(red:0.55, green:0.26, blue:0.86, alpha:1.00)),
+                                                                 .cornerRadius(3.0),
+                                                                 .bouncesOnChange(false)])
     lazy var searchAPI = AMapSearchAPI.init()
     var mapView: MAMapView!
     var originPoi: AMapPOI?
@@ -175,27 +183,7 @@ class RouteViewController: UIViewController, MAMapViewDelegate, AMapSearchDelega
     }
 
     func searchRoutePlanningDrive() {
-        
-//        let request = AMapDrivingRouteSearchRequest()
-//
-//        if let originPoi = self.originPoi {
-//            request.origin = originPoi.location
-//        }
-//        else {
-//            request.origin = AMapGeoPoint.location(withLatitude: CGFloat((self.currentLocation?.coordinate.latitude)!),
-//                                                   longitude: CGFloat((self.currentLocation?.coordinate.longitude)!))
-//        }
-//        request.destination = self.destinationPoi.location
-//        request.requireExtension = true
-//        searchAPI?.delegate = self
-//        searchAPI?.aMapDrivingRouteSearch(request)
-//
-//        AMapNaviDriveManager.sharedInstance().calculateDriveRoute(
-//            withStart: [startPoint],
-//            end: [endPoint],
-//            wayPoints: nil,
-//            drivingStrategy: 17)
-        
+                
         if let originPoint = self.originPoi {
             AMapNaviDriveManager.sharedInstance().calculateDriveRoute(withStart: [AMapNaviPoint.location(withLatitude: originPoint.location.latitude, longitude: originPoint.location.longitude)],
                                                                       end: [AMapNaviPoint.location(withLatitude: self.destinationPoi.location.latitude, longitude: self.destinationPoi.location.longitude)],
@@ -256,34 +244,12 @@ class RouteViewController: UIViewController, MAMapViewDelegate, AMapSearchDelega
 
     func mapView(_ mapView: MAMapView!, rendererFor overlay: MAOverlay!) -> MAOverlayRenderer! {
 
-        if overlay.isKind(of: LineDashPolyline.self) {
-            let naviPolyline: LineDashPolyline = overlay as! LineDashPolyline
-            let renderer: MAPolylineRenderer = MAPolylineRenderer(overlay: naviPolyline.polyline)
-            renderer.lineWidth = 8.0
-            renderer.strokeColor = UIColor.red
-            renderer.lineDashType = MALineDashType.square
-
-            return renderer
-        }
-        if overlay.isKind(of: MANaviPolyline.self) {
-
-            let naviPolyline: MANaviPolyline = overlay as! MANaviPolyline
-            let renderer: MAPolylineRenderer = MAPolylineRenderer(overlay: naviPolyline.polyline)
-            renderer.lineWidth = 8.0
-
-            if naviPolyline.type == MANaviAnnotationType.walking {
-                renderer.strokeColor = naviRoute?.walkingColor
-            }
-            else {
-                renderer.strokeColor = naviRoute?.routeColor;
-            }
-
-            return renderer
-        }
-        if overlay.isKind(of: MAMultiPolyline.self) {
-            let renderer: MAMultiColoredPolylineRenderer = MAMultiColoredPolylineRenderer(multiPolyline: (overlay as! MAMultiPolyline))
-            renderer.lineWidth = 8.0
-            renderer.strokeColors = naviRoute?.multiPolylineColors
+        if overlay.isKind(of: MultiDriveRoutePolyline.self) {
+            let polyline: MultiDriveRoutePolyline = overlay as! MultiDriveRoutePolyline
+            let renderer: MAMultiTexturePolylineRenderer = MAMultiTexturePolylineRenderer.init(multiPolyline: polyline)
+            renderer.lineWidth = CGFloat(AMapNaviRoutePolylineDefaultWidth)
+            renderer.strokeTextureImages = polyline.polylineTextureImagesSeleted
+            renderer.lineJoinType = kMALineJoinRound
 
             return renderer
         }
@@ -418,6 +384,7 @@ extension RouteViewController: AMapNaviDriveManagerDelegate {
             coords.deallocate()
         }
         self.mapView.showAnnotations(self.mapView.annotations, animated: false)
+        self.mapView.showOverlays(self.mapView.overlays, edgePadding: UIEdgeInsets.zero, animated: true)
         self.selectNaviRoute(routeId: firstRouteId)
     }
     
@@ -452,7 +419,7 @@ extension RouteViewController: AMapNaviDriveManagerDelegate {
         var imageName = ""
         switch routeStatus {
         case .smooth:
-            imageName = "custtexture_greed"
+            imageName = "custtexture_green"
         case .slow:
             imageName = "custtexture_slow"
         case .jam:
@@ -464,11 +431,11 @@ extension RouteViewController: AMapNaviDriveManagerDelegate {
         }
 
         if !selected {
-            imageName = imageName + "_unselected.png"
+            imageName = imageName + "_unselected"
         }
         
         let bundlePath = Bundle.main.path(forResource: "AMapNavi", ofType: "bundle")!
-        imageName = "\(bundlePath)/images/custtexture_slow.png"
+        imageName = "\(bundlePath)/nibs/\(imageName).png"
         let image = UIImage.init(named: imageName);
         return image
     }

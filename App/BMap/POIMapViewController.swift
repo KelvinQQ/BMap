@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import FloatingPanel
 
 extension POIMapViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -43,6 +44,7 @@ extension POIMapViewController: MAMapViewDelegate {
 
 class POIMapViewController: UIViewController {
 
+    var fpc: FloatingPanelController!
     lazy var tableView = UITableView.init(frame: CGRect.zero, style: UITableView.Style.plain)
     public lazy var poisArray = [AMapPOI]()
     lazy var mapView: MAMapView = MAMapView.init(frame: .zero)
@@ -67,7 +69,6 @@ class POIMapViewController: UIViewController {
         }
         self.mapView.delegate = self
         self.mapView.isShowTraffic = true
-//        self.mapView.setZoomLevel(16, animated: true)
         self.mapView.showsCompass = false
         
         let backButton = UIButton.init(type: .custom)
@@ -135,4 +136,8 @@ class POIMapViewController: UIViewController {
     @objc func backButtonAction() {
         self.navigationController?.popViewController(animated: true)
     }
+}
+
+class PoiListViewController: UIViewController {
+    
 }
